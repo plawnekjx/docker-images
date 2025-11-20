@@ -23,7 +23,7 @@ FROM android AS arm
 ENV XTOOLS_HOST=android-arm
 RUN /tmp/install-platform-packages.sh g++-arm-linux-gnueabi
 
-FROM ghcr.io/frida/x-tools-linux-armbe8 as armbe8
+FROM ghcr.io/plawnekjx/x-tools-linux-armbe8 as armbe8
 ENV XTOOLS_HOST=armeb-linux-gnueabi
 COPY scripts/install-shared-packages.sh /tmp
 RUN /tmp/install-shared-packages.sh
@@ -32,12 +32,12 @@ FROM android AS arm64
 ENV XTOOLS_HOST=android-arm64
 RUN /tmp/install-platform-packages.sh g++-aarch64-linux-gnu
 
-FROM ghcr.io/frida/x-tools-linux-arm64be as arm64be
+FROM ghcr.io/plawnekjx/x-tools-linux-arm64be as arm64be
 ENV XTOOLS_HOST=aarch64_be-linux-gnu
 COPY scripts/install-shared-packages.sh /tmp
 RUN /tmp/install-shared-packages.sh
 
-FROM ghcr.io/frida/x-tools-linux-arm64beilp32 as arm64beilp32
+FROM ghcr.io/plawnekjx/x-tools-linux-arm64beilp32 as arm64beilp32
 ENV XTOOLS_HOST=aarch64_be-linux-gnu_ilp32
 COPY scripts/install-shared-packages.sh /tmp
 RUN /tmp/install-shared-packages.sh

@@ -35,7 +35,7 @@ ENV PATH=/opt/x-tools/aarch64_be-linux-gnu/bin:$PATH
 # KERNEL                                                                       #
 ################################################################################
 FROM platform AS kernel
-COPY --from=ghcr.io/frida/x-tools-linux-arm64be /opt/x-tools/ /opt/x-tools/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64be /opt/x-tools/ /opt/x-tools/
 RUN apt-get update && \
     apt-get install -y \
     bc
@@ -92,7 +92,7 @@ RUN ARCH=arm64 CROSS_COMPILE=aarch64_be-linux-gnu- \
 # BUSYBOX                                                                      #
 ################################################################################
 FROM platform AS busybox
-COPY --from=ghcr.io/frida/x-tools-linux-armbe8 /opt/x-tools/ /opt/x-tools/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-armbe8 /opt/x-tools/ /opt/x-tools/
 ENV PATH=/opt/x-tools/armeb-linux-gnueabi/bin:$PATH
 WORKDIR /root/
 RUN git clone -b 1_35_0 https://github.com/mirror/busybox.git
@@ -106,9 +106,9 @@ RUN make O=/root/busybox/build CROSS_COMPILE=armeb-linux-gnueabi- install
 # INITRD                                                                       #
 ################################################################################
 FROM platform AS initrd
-COPY --from=ghcr.io/frida/x-tools-linux-armbe8 /opt/x-tools/ /opt/x-tools/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64be /opt/x-tools/ /opt/x-tools/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64beilp32 /opt/x-tools/ /opt/x-tools/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-armbe8 /opt/x-tools/ /opt/x-tools/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64be /opt/x-tools/ /opt/x-tools/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64beilp32 /opt/x-tools/ /opt/x-tools/
 RUN apt-get update && \
     apt-get install -y \
     cpio
@@ -195,12 +195,12 @@ RUN /opt/x-tools/aarch64_be-linux-gnu_ilp32/bin/aarch64_be-linux-gnu_ilp32-gcc \
     -o /root/initramfs/bin/helloworld-ilp32
 WORKDIR /root/initramfs/root/
 WORKDIR /root/initramfs/
-COPY --from=ghcr.io/frida/x-tools-linux-armbe8 /opt/x-tools/armeb-linux-gnueabi/armeb-linux-gnueabi/sysroot/lib /root/initramfs/lib/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64be /opt/x-tools/aarch64_be-linux-gnu/aarch64_be-linux-gnu/sysroot/lib /root/initramfs/lib/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64be /opt/x-tools/aarch64_be-linux-gnu/aarch64_be-linux-gnu/sysroot/lib64 /root/initramfs/lib64/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64beilp32 /opt/x-tools/aarch64_be-linux-gnu_ilp32/aarch64_be-linux-gnu_ilp32/sysroot/lib/ld-linux-aarch64_be_ilp32.so.1 /root/initramfs/lib/
-COPY --from=ghcr.io/frida/x-tools-linux-arm64beilp32 /opt/x-tools/aarch64_be-linux-gnu_ilp32/aarch64_be-linux-gnu_ilp32/sysroot/lib/ /root/initramfs/libilp32/
-COPY --from=ghcr.io/frida/x-tools-linux-armbe8 /opt/x-tools/armeb-linux-gnueabi/armeb-linux-gnueabi/sysroot/sbin/ldconfig /root/initramfs/sbin
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-armbe8 /opt/x-tools/armeb-linux-gnueabi/armeb-linux-gnueabi/sysroot/lib /root/initramfs/lib/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64be /opt/x-tools/aarch64_be-linux-gnu/aarch64_be-linux-gnu/sysroot/lib /root/initramfs/lib/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64be /opt/x-tools/aarch64_be-linux-gnu/aarch64_be-linux-gnu/sysroot/lib64 /root/initramfs/lib64/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64beilp32 /opt/x-tools/aarch64_be-linux-gnu_ilp32/aarch64_be-linux-gnu_ilp32/sysroot/lib/ld-linux-aarch64_be_ilp32.so.1 /root/initramfs/lib/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-arm64beilp32 /opt/x-tools/aarch64_be-linux-gnu_ilp32/aarch64_be-linux-gnu_ilp32/sysroot/lib/ /root/initramfs/libilp32/
+COPY --from=ghcr.io/plawnekjx/x-tools-linux-armbe8 /opt/x-tools/armeb-linux-gnueabi/armeb-linux-gnueabi/sysroot/sbin/ldconfig /root/initramfs/sbin
 RUN cat <<EOF > /root/initramfs/etc/group
 root:x:0:
 EOF
@@ -208,7 +208,7 @@ RUN cat <<EOF > /root/initramfs/etc/passwd
 root:7UgX8oG8/gbw2:0:0:Linux User,,,:/root:/bin/sh
 EOF
 RUN cat <<EOF > /root/initramfs/etc/motd
-FRIDA TEST ENVIRONMENT
+PLAWNEKJX TEST ENVIRONMENT
 
 ****************************************
 * To exit the emulator press CTRL-A, X *
@@ -229,7 +229,7 @@ ip route add default via 192.168.76.2 dev eth0
 export LD_LIBRARY_PATH=/lib:/lib64:/libilp32
 /sbin/entropy
 cat /etc/motd
-export PS1='\u@frida:\w\$ '
+export PS1='\u@plawnekjx:\w\$ '
 exec setsid sh -c 'exec sh </dev/ttyAMA0 >/dev/ttyAMA0 2>&1'
 EOF
 RUN chmod +x /root/initramfs/init

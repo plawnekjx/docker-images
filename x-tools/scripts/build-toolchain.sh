@@ -8,7 +8,7 @@ xtools_sysroot=${xtools_root}/${xtools_host}/sysroot
 xtools_prefix=${xtools_sysroot}/usr
 
 texinfo_tag="20250317"
-texinfo_version="7.1-3build2frida1"
+texinfo_version="7.1-3build2plawnekjx1"
 texinfo_packages=( \
     "texinfo_${texinfo_version}_all.deb" \
     "texinfo-lib_${texinfo_version}_amd64.deb" \
@@ -27,7 +27,7 @@ apt-get install -y curl
 cd /tmp
 texinfo_pkg_paths=()
 for pkg in ${texinfo_packages[@]}; do
-  curl -LO https://github.com/frida/docker-images/releases/download/$texinfo_tag/$pkg
+  curl -LO https://github.com/plawnekjx/docker-images/releases/download/$texinfo_tag/$pkg
   texinfo_pkg_paths+=("./$pkg")
 done
 apt-get install -y ${texinfo_pkg_paths[@]}
@@ -47,7 +47,7 @@ apt-get install -y \
     unifdef \
     unzip
 
-git clone https://github.com/frida/crosstool-ng.git /src/crosstool-ng
+git clone https://github.com/plawnekjx/crosstool-ng.git /src/crosstool-ng
 (
   cd /src/crosstool-ng
   ./bootstrap

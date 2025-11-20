@@ -27,8 +27,8 @@ jobs:
             patch -p1 < $file
           done
           export DEBFULLNAME="Ole André Vadla Ravnås"
-          export DEBEMAIL="oleavr@frida.re"
-          dch --local frida "Apply patches needed for Frida's use-cases."
+          export DEBEMAIL="oleavr@plawnekjx.re"
+          dch --local plawnekjx "Apply patches needed for Plawnekjx's use-cases."
           dpkg-buildpackage -uc -us -b
       - name: Release
         uses: softprops/action-gh-release@v2
